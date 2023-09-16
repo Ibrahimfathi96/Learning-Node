@@ -1,1 +1,6 @@
 .history/
+
+
+*node_modules/
+*IBMF-Courses/node_modules/
+*IBMF-Courses/history/
