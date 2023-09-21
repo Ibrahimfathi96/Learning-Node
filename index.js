@@ -1,45 +1,15 @@
-// // import fs from "node:fs";
-// const crypto = require("node:crypto");
-// process.env.UV_THREADPOOL_SIZE = 5;
-const start = performance.now();
-
-// crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
-//   console.log("End of PBKDF2 in ms", performance.now() - start);
-// });
-
-// crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
-//   console.log("End of PBKDF2 in ms", performance.now() - start);
-// });
-
-// crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
-//   console.log("End of PBKDF2 in ms", performance.now() - start);
-// });
-
-// crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
-//   console.log("End of PBKDF2 in ms", performance.now() - start);
-// });
-
-// crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
-//   //No.5 will have larger time because the default size is 4 only but there's a sol. process.env.UV_THREADPOOL_SIZE = 5;
-//   console.log("End of PBKDF2 in ms", performance.now() - start);
-// });
-
-// // crypto.pbkdf2Sync("secret", "salt", 100000, 64, "sha512");
-// // console.log("End of PBKDF2 in ms", performance.now() - start);
-
-// // crypto.pbkdf2Sync("secret", "salt", 100000, 64, "sha512");
-// // console.log("End of PBKDF2 in ms", performance.now() - start);
-fetch("https://dummyjson.com/products").then(() => {
-  console.log("End of Request in ms", performance.now() - start);
+const http = require("node:http");
+const server = http.createServer((req, res) => {
+  console.log("Request:", req.url);
+  if (req.url == "/") {
+    res.end("Home Page");
+  } else if (req.url == "/about") {
+    res.end("About Page");
+  } else {
+    res.end("Not Found Page");
+  }
+  res.end("Hello World!");
 });
-fetch("https://dummyjson.com/products").then(() => {
-  console.log("End of Request in ms", performance.now() - start);
+server.listen(3001, () => {
+  console.log("Listening on port 3001");
 });
-fetch("https://dummyjson.com/products").then(() => {
-  console.log("End of Request in ms", performance.now() - start);
-});
-fetch("https://dummyjson.com/products").then(() => {
-  console.log("End of Request in ms", performance.now() - start);
-});
-
-
