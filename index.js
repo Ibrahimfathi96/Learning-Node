@@ -1,12 +1,31 @@
 // import fs from "node:fs";
-const fs = require("node:fs");
-console.log("First");
-// console.log("FileContent", fs.readFileSync("./test.txt", "utf-8"));
+const crypto = require("node:crypto");
+process.env.UV_THREADPOOL_SIZE = 5;
+const start = performance.now();
 
-fs.readFile("./test.txt", "utf-8", (err, content) => {
-  err
-    ? console.error("Error Reading the file ==>", err)
-    : console.log("fileContent:", content);
-});//libvu ==> File I/O ==> Thread Pool ==> async operations / functions
+crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
+  console.log("End of PBKDF2 in ms", performance.now() - start);
+});
 
-console.log("Second");
+crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
+  console.log("End of PBKDF2 in ms", performance.now() - start);
+});
+
+crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
+  console.log("End of PBKDF2 in ms", performance.now() - start);
+});
+
+crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
+  console.log("End of PBKDF2 in ms", performance.now() - start);
+});
+
+crypto.pbkdf2("secret", "salt", 100000, 64, "sha512", () => {
+  //No.5 will have larger time because the default size is 4 only but there's a sol. process.env.UV_THREADPOOL_SIZE = 5;
+  console.log("End of PBKDF2 in ms", performance.now() - start);
+});
+
+// crypto.pbkdf2Sync("secret", "salt", 100000, 64, "sha512");
+// console.log("End of PBKDF2 in ms", performance.now() - start);
+
+// crypto.pbkdf2Sync("secret", "salt", 100000, 64, "sha512");
+// console.log("End of PBKDF2 in ms", performance.now() - start);
