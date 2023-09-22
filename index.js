@@ -1,24 +1,47 @@
-const http = require("node:http");
-const fs = require("node:fs");
-const homePage = fs.readFileSync("./views/index.html", "utf-8");
-const cssFile = fs.readFileSync("./views/styles.css", "utf-8");
+const express = require("express");
+const app = express();
+const port = 5000;
 
-const server = http.createServer((req, res) => {
-  console.log("========== req.url ============");
-  console.log(req.url);
-  if (req.url === "/") {
-    res.write(homePage);
-  } else if (req.url === "/about") {
-    res.write("<h1>About Page</h1>");
-  } else if (req.url === "/styles.css") {
-    res.write(cssFile);
-  } else {
-    res.statusCode = 404;
-    res.write("<h1>Not Found Page 404</h1>");
-  }
-  res.end();
+// app.use(express.static("./views"));
+app.use((req, res, next) => {
+  //middleware .. could be added to specific route app.use('/here',())
+  console.log("MIDDLEWARE 1");
+  console.log("METHOD:", req.method, "URL:", req.url);
+  next();
+});
+app.use((req, res, next) => {
+  console.log("MIDDLEWARE 2");
+  next();
+});
+app.get("/", (req, res) => {
+  res.send("Welcome to express web framework!");
 });
 
-server.listen(8000, "localhost", () => {
-  console.log("Listening on Port: 8000");
+app.get("/about", (req, res) => {
+  res.send("Hello From About Page!");
+});
+
+app.get("/home", (req, res) => {
+  res.send("<h1>Home Page</h1>");
+});
+
+app.get("/product", (req, res) => {
+  res.send([
+    {
+      id: 1,
+      title: "product1"
+    },
+    {
+      id: 2,
+      title: "product2"
+    },
+    {
+      id: 3,
+      title: "product3"
+    }
+  ]);
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port: ${port}`);
 });
