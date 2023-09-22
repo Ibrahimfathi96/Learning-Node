@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const port = 5000;
+const morgan = require("morgan");
 
 // app.use(express.static("./views"));
 app.use((req, res, next) => {
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
   console.log("MIDDLEWARE 2");
   next();
 });
+app.use(morgan("dev"));
 app.get("/", (req, res) => {
   res.send("Welcome to express web framework!");
 });
