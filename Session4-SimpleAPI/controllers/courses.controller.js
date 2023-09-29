@@ -40,7 +40,12 @@ const addNewCourse = asyncWrapper(async (req, res, next) => {
     .json({ status: httpStatusText.SUCCESS, data: { course: newCourse } });
 });
 
-const updateCourse = asyncWrapper(async (req, res) => {
+const updateCourse = asyncWrapper(async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const error = AppError.create(errors.array(), 400, httpStatusText.FAIL);
+    return next(error);
+  }
   const courseId = req.params.courseId;
   const updatedCourse = await Course.updateOne(
     { _id: courseId },

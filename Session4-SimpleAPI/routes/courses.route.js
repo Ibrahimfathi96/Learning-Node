@@ -3,7 +3,11 @@ const express = require("express");
 const router = express.Router();
 
 const coursesController = require("../controllers/courses.controller");
-const { validationScheme } = require("../middlewares/validationScheme");
+const {
+  titleValidation,
+  priceValidation,
+  validationScheme
+} = require("../middlewares/validationScheme");
 
 router
   .route("/")
@@ -13,7 +17,7 @@ router
 router
   .route("/:courseId")
   .get(coursesController.getSingleCourse)
-  .patch(coursesController.updateCourse)
+  .patch(validationScheme(), coursesController.updateCourse)
   .delete(coursesController.deleteCourse);
 
 module.exports = router;
