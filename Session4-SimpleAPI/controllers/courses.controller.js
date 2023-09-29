@@ -1,38 +1,46 @@
 const { validationResult } = require("express-validator");
 const Course = require("../models/course.model");
-
-// //LOCAL WITHOUT DB
-// let { courses } = require("../data/courses");
+const httpStatusText = require("../utils/httpStatusText");
 
 //Route Handlers
 const getAllCourses = async (req, res) => {
-  //getAllCourses from DB using Course model
-  const courses = await Course.find();
-  console.log("Courses", courses);
-  res.json(courses);
+  const courses = await Course.find({}, { __v: false });
+  res.json({ status: httpStatusText.SUCCESS, data: { courses } });
 };
 
 const getSingleCourse = async (req, res) => {
   try {
     const course = await Course.findById(req.params.courseId);
     if (!course) {
-      return res.status(404).json({ code: 404, msg: "Course not found!" });
+      return res.status(404).json({
+        status: httpStatusText.FAIL,
+        data: { course: "Course not found!" }
+      });
     }
-    res.json(course);
+    return res.json({ status: httpStatusText.SUCCESS, data: { course } });
   } catch (err) {
-    return res.status(400).json({ code: 400, msg: "Invalid Object ID!" });
+    return res.status(400).json({
+      code: 400,
+      status: httpStatusText.ERROR,
+      data: null,
+      msg: err.message
+    });
   }
 };
 
 const addNewCourse = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json(errors.array());
+    return res
+      .status(400)
+      .json({ status: httpStatusText.FAIL, data: errors.array() });
   }
 
   const newCourse = new Course(req.body);
   await newCourse.save();
-  res.status(201).json(newCourse);
+  res
+    .status(201)
+    .json({ status: httpStatusText.SUCCESS, data: { course: newCourse } });
 };
 
 const updateCourse = async (req, res) => {
@@ -44,18 +52,25 @@ const updateCourse = async (req, res) => {
         $set: { ...req.body }
       }
     );
-    res.status(200).json(updatedCourse);
+    res.status(200).json({
+      status: httpStatusText.SUCCESS,
+      data: { course: updatedCourse }
+    });
   } catch (err) {
-    return res.status(400).json({ errorMsg: err });
+    return res
+      .status(400)
+      .json({ status: httpStatusText.ERROR, msg: err.message });
   }
 };
 
 const deleteCourse = async (req, res) => {
   try {
-    const data = await Course.deleteOne({ _id: req.params.courseId });
-    res.status(200).json({ success: true, msg: data });
+    await Course.deleteOne({ _id: req.params.courseId });
+    res.status(200).json({ status: httpStatusText.SUCCESS, data: null });
   } catch (err) {
-    return res.status(400).json({ errorMsg: err });
+    return res
+      .status(400)
+      .json({ status: httpStatusText.ERROR, msg: err.message });
   }
 };
 
