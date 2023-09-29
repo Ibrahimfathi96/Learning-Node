@@ -4,7 +4,14 @@ const httpStatusText = require("../utils/httpStatusText");
 
 //Route Handlers
 const getAllCourses = async (req, res) => {
-  const courses = await Course.find({}, { __v: false });
+  const query = req.query;
+  console.log("query:", query);
+  const limit = query.limit || 4;
+  const page = query.page || 1;
+  const skip = (page - 1) * limit;
+  //find({queryParameters}, {Projection})
+  //['p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'p7', 'p8', 'p9', 'p10']
+  const courses = await Course.find({}, { __v: false }).limit(limit).skip(skip); //Pagination
   res.json({ status: httpStatusText.SUCCESS, data: { courses } });
 };
 
