@@ -3,11 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const coursesController = require("../controllers/courses.controller");
-const {
-  titleValidation,
-  priceValidation,
-  validationScheme
-} = require("../middlewares/validationScheme");
+const { validationScheme } = require("../middlewares/validationScheme");
 
 router
   .route("/")

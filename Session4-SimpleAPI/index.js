@@ -14,8 +14,10 @@ app.use(express.json());
 const port = process.env.PORT || 3000;
 
 const coursesRouter = require("./routes/courses.route");
+const usersRouter = require("./routes/users.route");
 
-app.use("/api/courses", coursesRouter);
+app.use("/api/courses", coursesRouter); // /api/courses
+app.use("/api/users", usersRouter); // /api/users
 
 //Global Middleware for not found routes
 app.all("*", (req, res, next) => {
