@@ -6,9 +6,9 @@ const bcrypt = require("bcryptjs");
 const generatJWT = require("../utils/generate.JWT");
 
 const getAllUsers = asyncWrapper(async (req, res) => {
-  // console.log(req.headers);
-  // const query = req.query;
-  // console.log("query:", query);
+  console.log(req.headers);
+  const query = req.query;
+  console.log("query:", query);
 
   const limit = query.limit || 4;
   const page = query.page || 1;
