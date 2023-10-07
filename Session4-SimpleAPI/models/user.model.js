@@ -31,6 +31,10 @@ const userScheme = new mongoose.Schema({
     type: String,
     enum: [userRoles.USER, userRoles.ADMIN, userRoles.MANAGER],
     default: userRoles.USER
+  },
+  avatar: {
+    type: String,
+    default: "/uploads/pp-placeholder.png"
   }
 });
 
