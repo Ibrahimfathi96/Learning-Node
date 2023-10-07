@@ -20,7 +20,7 @@ const getAllUsers = asyncWrapper(async (req, res) => {
 });
 
 const registerUser = asyncWrapper(async (req, res, next) => {
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, password, role } = req.body;
   const oldUser = await User.findOne({ email: email });
   if (oldUser) {
     const error = appErrors.create(
@@ -38,11 +38,16 @@ const registerUser = asyncWrapper(async (req, res, next) => {
     firstName,
     lastName,
     email,
-    password: hashedPassword
+    password: hashedPassword,
+    role
   });
 
   //generate jwt token
-  const token = await generatJWT({ email: newUser.email, id: newUser._id });
+  const token = await generatJWT({
+    email: newUser.email,
+    id: newUser._id,
+    role: newUser.role
+  });
   newUser.token = token;
   await newUser.save();
 
@@ -82,7 +87,11 @@ const loginUser = asyncWrapper(async (req, res, next) => {
     return next(error);
   }
 
-  const token = await generatJWT({ email: user.email, id: user._id });
+  const token = await generatJWT({
+    email: user.email,
+    id: user._id,
+    role: user.role
+  });
 
   res.status(200).json({
     status: httpStatusText.SUCCESS,
